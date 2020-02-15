@@ -1,0 +1,24 @@
+
+   #%RAML 1.0 Library
+usage: Product API Library
+
+types:
+  Properties:
+    type: object
+    properties:
+      name : 
+        type: string
+        required: true
+        maxLength: 100
+      description:
+        type: string
+        required: true
+        maxLength: 4000       
+      image : 
+        type: string
+        required: false
+        maxLength: 250
+
+
+      
+        

@@ -1,0 +1,146 @@
+#%RAML 1.0
+title: Product API
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/ab2c6605-af96-413a-a5c2-a1ae88019bc5/ # baseUri:
+
+protocols: [ HTTPS,HTTP ]
+
+traits:
+   inputHeaders: !include /product-api-trait.raml
+
+uses:
+   product-api-lib : product-api-library.raml
+  
+/createProduct:
+  description: Endpoint to create product
+  is: inputHeaders
+  post:
+   body:
+    application/json:
+      type: product-api-lib.Properties[]
+   responses:
+    200:
+     body:
+       application/json:      
+          example: |     
+              {
+                "message" : "Product created successfully"
+                }
+    500:
+     body:
+       application/json:
+          example: | 
+              {
+               "Product API Service unavailable"
+              }
+        
+
+/getProduct/{productId}:
+   description: Endpoint to get product
+   is: inputHeaders
+   get:
+    responses:
+     200:
+      body:
+        application/json:
+          type : product-api-lib.Properties[]
+     404:
+       body:
+          application/json:
+            example: |
+              {
+                 "ProductId not found"
+              }
+     500:
+       body:
+          application/json:
+            example: | 
+             {
+                 "Product API Service unavailable"
+             }
+
+/updateProduct:
+   description: Endpoint for update product
+   is: inputHeaders
+   put:
+     body:
+      application/json:
+       example: | 
+        type: product-api-lib.Properties[]
+     responses:
+      201:
+       body:
+         application/json:
+           example: |
+             {  
+                 "message": "Product update successful"
+             }
+      200:
+        body:
+          application/json:
+            example: |
+             {
+               "message": "Product created successfully"
+             }
+      500:
+        body:
+          application/json:
+            example: |
+             {
+               "Product API Service not available"
+             }
+/deleteProduct/{productId}:
+ description: Endpoint for deletion of product
+ is: inputHeaders
+ delete:
+  responses:
+   200:
+    body:
+      application/json:
+        example: | 
+          {
+          "message" : "Product got deleted successfully"
+          }
+   404:
+     body:
+        application/json:
+          example: |
+           {
+             "message" : "Product not found"
+           }
+   500:
+     body:
+       application/json:
+          example: |
+             {
+               "Product API Service not available"
+             } 
+             
+             
+/products:
+ is: inputHeaders
+ description: "To get full list of products"
+ get:
+    queryParameters:
+     pageNum:
+      required: true
+      type: integer
+      default: 1
+    responses:
+      200:
+       body:
+        application/json:
+          type : product-api-lib.Properties[]
+      404:
+       body:
+          application/json:
+            example: |
+              {
+                 "ProductId not found"
+              }
+      500:
+       body:
+          application/json:
+            example: | 
+             {
+                 "Product API Service unavailable"
+             }

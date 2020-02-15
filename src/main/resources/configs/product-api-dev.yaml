@@ -1,0 +1,11 @@
+#Contact DB Configurations
+db:
+  host: "sql3.freesqldatabase.com"
+  user: "sql3322232"
+  password: "JjnsVmb8d3"
+  port: "3306"
+  name: "sql3322232"
+
+#HTTP Listener Configurations 
+http:
+  port: "8086"
