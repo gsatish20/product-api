@@ -33,7 +33,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
         </http:listener>
         <apikit:router xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" config-ref="product-api-config" />
         <error-handler>
-            <on-error-propagate type="APIKIT:BAD_REQUEST">
+            <on-error-propagate type="APIKIT:BAD_REQUEST" enableNotifications="true" logException="true">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
@@ -142,6 +142,14 @@ output application/json
     </flow>
     <flow name="put:\updateProduct:product-api-config">
 		<foreach doc:name="For Each" doc:id="f1cb63f9-58d3-4e64-a4c7-9884e2303522" collection="#[payload]">
+			<ee:transform doc:name="Transform Message" doc:id="a03c56f3-4dae-4ccc-973a-e882326a9039" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
 			<db:update doc:name="update-product" doc:id="9e1f25dc-47ca-4938-8ca6-35db2f2bf58b" config-ref="Database_Config">
 			<db:sql>UPDATE product SET  Name =:name ,Description =:description ,Image =:image,createDate=:createDate,updateDate=:updateDate where productId =:productId</db:sql>
 			<db:input-parameters><![CDATA[#[{
@@ -211,6 +219,14 @@ payload]]></ee:set-payload>
     </flow>
     <flow name="post:\createProduct:application\json:product-api-config">
         <foreach doc:name="For Each" doc:id="7bd65223-9ab6-4f20-9e6c-f16c455ea1d2" collection="#[payload]">
+			<ee:transform doc:name="Transform Message" doc:id="7c6d2c08-3473-4306-97d0-f5b5fe3e4b96" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
 			<db:insert doc:name="create-product" doc:id="6dfb869b-290d-4acf-a0ae-30cf43ba6cb4" config-ref="Database_Config">
 			<db:sql>INSERT INTO product(productId ,Name ,Description,Image,createDate,updateDate ) VALUES (:productId,:name,:description,:image,:createDate,:updateDate)</db:sql>
 			<db:input-parameters><![CDATA[#[{
